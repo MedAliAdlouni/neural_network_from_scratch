@@ -1,62 +1,75 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Function to plot training loss with enhanced styling
 def plot_training_loss(losses):
     """
-    Plots the training loss over epochs with enhanced styling.
+    Plot training loss over epochs with enhanced styling.
 
     Parameters:
-        losses (list or array-like): A list or array of loss values per epoch.
+        losses (list or array-like): Loss values recorded at each epoch.
     """
     plt.figure(figsize=(10, 6))
     plt.plot(losses, color='royalblue', linestyle='-', marker='o', markersize=4, linewidth=1.5, label='Training Loss')
-    
-    # Enhancing the plot
+
     plt.title("Training Loss Over Epochs", fontsize=16, fontweight='bold')
     plt.xlabel("Epoch", fontsize=14)
     plt.ylabel("Loss", fontsize=14)
-    
-    # Dynamic y-axis limits with a margin
-    min_loss = min(losses)
-    max_loss = max(losses)
-    plt.ylim(min_loss - 0.05 * abs(min_loss), max_loss + 0.05 * abs(max_loss))
-    
-    plt.grid(visible=True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
+
+    # Add dynamic margin to y-axis limits
+    min_loss, max_loss = min(losses), max(losses)
+    margin = 0.05 * abs(min_loss)
+    plt.ylim(min_loss - margin, max_loss + margin)
+
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
-    
-    # Adding tight layout for better spacing
     plt.tight_layout()
-    
-    # Display plot
     plt.show()
 
 
-# Function to plot training loss for all activation functions
-def plot_training_loss(losses_dict):
+def plot_training_loss_tuning(losses_dict):
+    """
+    Plot training loss curves for multiple activation functions.
+
+    Parameters:
+        losses_dict (dict): Dictionary mapping activation function names to their corresponding list of loss values.
+    """
     plt.figure(figsize=(10, 6))
-    
-    for activation, losses in losses_dict.items():
-        plt.plot(losses, label=activation)  # Plot each activation's loss
 
-    plt.title('Training Loss for Different Activation Functions')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    for activation, losses in losses_dict.items():
+        plt.plot(losses, label=activation)
+
+    plt.title("Training Loss for Different Activation Functions", fontsize=16, fontweight='bold')
+    plt.xlabel("Epoch", fontsize=14)
+    plt.ylabel("Loss", fontsize=14)
+    plt.ylim(bottom=0)  # Ensures y-axis starts from 0
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
-    plt.grid()
-    plt.ylim(bottom=0)  # Optional: adjust y-axis to start from 0
+    plt.tight_layout()
     plt.show()
 
-# Function to plot predictions against true values
+
 def plot_predictions(y_true, y_pred, activation):
+    """
+    Plot predicted values against true values for a given activation function.
+
+    Parameters:
+        y_true (array-like): Ground truth output values.
+        y_pred (array-like): Model predictions.
+        activation (str): Name of the activation function used (for plot title).
+    """
     plt.figure(figsize=(8, 6))
-    plt.scatter(range(len(y_true)), y_true, color='blue', label='True Values', s=100, marker='o')
-    plt.scatter(range(len(y_pred)), y_pred, color='red', label='Predicted Values', s=100, marker='x')
-    plt.title(f'True vs Predicted Values ({activation})')
-    plt.xlabel('Sample Index')
-    plt.ylabel('Output Value')
-    plt.xticks(range(len(y_true)))
-    plt.yticks([0, 1])  # Adjust as needed for your output range
+    sample_indices = range(len(y_true))
+
+    plt.scatter(sample_indices, y_true, color='blue', label='True Values', s=100, marker='o')
+    plt.scatter(sample_indices, y_pred, color='red', label='Predicted Values', s=100, marker='x')
+
+    plt.title(f"True vs Predicted Values ({activation})", fontsize=16, fontweight='bold')
+    plt.xlabel("Sample Index", fontsize=14)
+    plt.ylabel("Output Value", fontsize=14)
+    plt.xticks(sample_indices)
+    plt.yticks([0, 1])  # Assumes binary output; adjust as needed
+
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
     plt.legend()
-    plt.grid()
+    plt.tight_layout()
     plt.show()
